@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Dashboard from "./components/Dashboard";
+import LoginModal from "./components/LoginModal";
+import Navbar from "./components/Navbar";
+import dashboardData from "./data/dashboardData.js";
 
 function App() {
+  const [showModal, setShowModal] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const [location, setLocation] = useState(Object.keys(dashboardData)[0]); // Default location
+
+  const handleLogin = () => {
+    setSuccess(true);
+    setTimeout(() => {
+      setShowModal(false);
+      setSuccess(false);
+    }, 1500);
+  };
+
+  // Example user object
+  const user = {
+    name: "Mohd Hassan",
+    id: "lc001",
+    avatar: "/user.png", // your user image
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar
+        isLoggedIn={showModal === false}
+        user={user}
+        onLogin={() => setShowModal(true)}
+        onLogout={() => setShowModal(true)}
+      />
+      <Dashboard
+        data={dashboardData}
+        location={location}
+        onLocationChange={setLocation}
+      />
+      {showModal && <LoginModal onLogin={handleLogin} success={success} />}
+    </>
   );
 }
 
