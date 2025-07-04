@@ -57,25 +57,29 @@ export default function EnquiryModal({ open, onClose, onSuccess }) {
           <span className="w-3 h-3 rounded-full bg-green-400"></span>
           <span className="mx-auto text-xl font-semibold text-white" style={{ flex: 1, textAlign: "center" }}>Publish Your Business</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-2">
           <input name="name" value={form.name} onChange={handleChange} placeholder="Full Name" required />
           <input name="email" value={form.email} onChange={handleChange} placeholder="Email" type="email" required />
           <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" required />
-          <input name="company" value={form.company} onChange={handleChange} placeholder="Company/Business Name" />
-          <input name="location" value={form.location} onChange={handleChange} placeholder="Location" />
+          <input name="company" value={form.company} onChange={handleChange} placeholder="Company" />
+          
         </div>
         <div className="mb-2">
           <span className="block text-white mb-1">Intrested In:</span>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
             {interestOptions.map(opt => (
-              <label key={opt.value} className="flex items-center gap-2 text-white text-sm">
+              <label
+                key={opt.value}
+                className="flex items-center gap-2 min-h-[1.5rem] leading-tight text-white text-sm"
+              >
                 <input
                   type="checkbox"
                   value={opt.value}
                   checked={form.interests.includes(opt.value)}
                   onChange={handleCheckbox}
+                  className="align-middle"
                 />
-                {opt.label}
+                <span className="align-middle">{opt.label}</span>
               </label>
             ))}
           </div>

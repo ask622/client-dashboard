@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import EnquiryModal from './EnquiryModal';
 import SuccessModal from './SuccessModal';
+import AdsPage from './AdsPage'; // Add this import
 
 const icons = {
   trial: "/icons/user-ads.svg",
@@ -18,6 +19,7 @@ const cardClass =
 const Dashboard = ({ data, location, onLocationChange }) => {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
+  const [adsPageOpen, setAdsPageOpen] = useState(false); // Add this state
 
   return (
     <div className="relative min-h-screen bg-[#101c2c] text-white overflow-hidden">
@@ -84,7 +86,7 @@ const Dashboard = ({ data, location, onLocationChange }) => {
         {/* Main Section */}
         <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
           {/* Graph Section - size reduced */}
-          <div className="bg-[#1a2233] rounded-2xl p-4 shadow-lg flex flex-col justify-end border-2 border-[#4e5d78] min-h-[180px] md:min-h-[220px] max-w-full lg:max-w-[500px] w-full mb-4 lg:mb-0">
+          <div className="bg-[#1a2233] rounded-2xl p-4 shadow-lg flex flex-col justify-end border-2 border-[#4e5d78] min-h-[140px] md:min-h-[200px] max-w-full lg:max-w-[500px] w-full mb-4 lg:mb-0">
             {/* Dummy graph image */}
             <img
               src={icons.cion}
@@ -96,7 +98,7 @@ const Dashboard = ({ data, location, onLocationChange }) => {
           {/* Stats Cards - 2 rows, 3 columns */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 w-full lg:w-[725px]">
             {/* Total User Ads */}
-            <div className={cardClass}>
+            <div className={cardClass} onClick={() => setAdsPageOpen(true)} style={{ cursor: "pointer" }}>
               <span className="absolute top-2 left-2 text-xs text-red-400 font-bold">Live</span>
               <span className="absolute top-2 right-2 w-3 h-3 bg-red-400 rounded-full"></span>
               <img
@@ -109,7 +111,7 @@ const Dashboard = ({ data, location, onLocationChange }) => {
               <span className="text-2xl md:text-3xl font-bold text-white">{data[location].ads.trial.toString().padStart(2, '')}</span>
             </div>
             {/* Business Profile */}
-            <div className={cardClass}>
+            <div className={cardClass} onClick={() => setAdsPageOpen(true)} style={{ cursor: "pointer" }}>
               <span className="absolute top-2 left-2 text-xs text-red-400 font-bold">Live</span>
               <span className="absolute top-2 right-2 w-3 h-3 bg-red-400 rounded-full"></span>
               <img src={icons.business} alt="Business Profile" className="w-10 h-10 md:w-14 md:h-14 mb-2" style={{filter: 'brightness(0) saturate(100%) invert(81%) sepia(98%) saturate(749%) hue-rotate(2deg) brightness(104%) contrast(104%)'}} />
@@ -117,7 +119,7 @@ const Dashboard = ({ data, location, onLocationChange }) => {
               <span className="text-2xl md:text-3xl font-bold text-white">{data[location].ads.business.toString().padStart(2, '')}</span>
             </div>
             {/* Banner Ads */}
-            <div className={cardClass}>
+            <div className={cardClass} onClick={() => setAdsPageOpen(true)} style={{ cursor: "pointer" }}>
               <span className="absolute top-2 left-2 text-xs text-red-400 font-bold">Live</span>
               <span className="absolute top-2 right-2 w-3 h-3 bg-red-400 rounded-full"></span>
               <img src={icons.banner} alt="Banner Ads" className="w-10 h-10 md:w-14 md:h-14 mb-2" style={{filter: 'brightness(0) saturate(100%) invert(81%) sepia(98%) saturate(749%) hue-rotate(2deg) brightness(104%) contrast(104%)'}} />
@@ -125,7 +127,7 @@ const Dashboard = ({ data, location, onLocationChange }) => {
               <span className="text-2xl md:text-3xl font-bold text-white">{data[location].ads.banner.toString().padStart(2, '')}</span>
             </div>
             {/* Video Ads */}
-            <div className={cardClass}>
+            <div className={cardClass} onClick={() => setAdsPageOpen(true)} style={{ cursor: "pointer" }}>
               <span className="absolute top-2 left-2 text-xs text-red-400 font-bold">Live</span>
               <span className="absolute top-2 right-2 w-3 h-3 bg-red-400 rounded-full"></span>
               <img src={icons.video} alt="Video Ads" className="w-10 h-10 md:w-14 md:h-14 mb-2" style={{filter: 'brightness(0) saturate(100%) invert(81%) sepia(98%) saturate(749%) hue-rotate(2deg) brightness(104%) contrast(104%)'}} />
@@ -133,7 +135,7 @@ const Dashboard = ({ data, location, onLocationChange }) => {
               <span className="text-2xl md:text-3xl font-bold text-white">{data[location].ads.video.toString().padStart(2, '')}</span>
             </div>
             {/* Home Ads */}
-            <div className={cardClass}>
+            <div className={cardClass} onClick={() => setAdsPageOpen(true)} style={{ cursor: "pointer" }}>
               <span className="absolute top-2 left-2 text-xs text-red-400 font-bold">Live</span>
               <span className="absolute top-2 right-2 w-3 h-3 bg-red-400 rounded-full"></span>
               <img src={icons.home} alt="Home Ads" className="w-10 h-10 md:w-14 md:h-14 mb-2" style={{filter: 'brightness(0) saturate(100%) invert(81%) sepia(98%) saturate(749%) hue-rotate(2deg) brightness(104%) contrast(104%)'}} />
@@ -161,6 +163,7 @@ const Dashboard = ({ data, location, onLocationChange }) => {
         open={successOpen}
         onClose={() => setSuccessOpen(false)}
       />
+      {adsPageOpen && <AdsPage onClose={() => setAdsPageOpen(false)} />}
     </div>
   );
 };
