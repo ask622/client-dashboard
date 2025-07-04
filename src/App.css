@@ -6,6 +6,13 @@
   height: 40vmin;
   pointer-events: none;
 }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.blink-dot {
+  animation: blink 1s infinite;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

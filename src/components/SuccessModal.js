@@ -1,19 +1,21 @@
-import React from 'react';
+import React from "react";
 
-const SuccessModal = ({ onClose }) => {
+export default function SuccessModal({ open, onClose }) {
+  if (!open) return null;
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-        <h2 className="text-green-600 text-xl font-bold mb-2">Successful!</h2>
-        <button
-          onClick={onClose}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-        >
-          Close
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center enquiry-modal-bg">
+      <div className="success-modal">
+        <div className="flex justify-center mb-4">
+          <svg width="80" height="80" fill="none" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="36" stroke="#1de9b6" strokeWidth="4" fill="none"/>
+            <path d="M25 40c4-8 26-8 30 0" stroke="#1de9b6" strokeWidth="3" fill="none" strokeLinecap="round"/>
+            <circle cx="32" cy="34" r="3" fill="#1de9b6"/>
+            <circle cx="48" cy="34" r="3" fill="#1de9b6"/>
+          </svg>
+        </div>
+        <div className="text-white text-xl font-bold mb-2">Woo hoo!!</div>
+        <button className="done-btn" onClick={onClose}>Done</button>
       </div>
     </div>
   );
-};
-
-export default SuccessModal;
+}
