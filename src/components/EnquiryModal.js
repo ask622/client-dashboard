@@ -22,24 +22,23 @@ const interestOptions = [
 export default function EnquiryModal({ open, onClose, onSuccess }) {
   const [form, setForm] = useState(initialState);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+    setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleCheckbox = e => {
+  const handleCheckbox = (e) => {
     const { value, checked } = e.target;
-    setForm(f => ({
+    setForm((f) => ({
       ...f,
       interests: checked
         ? [...f.interests, value]
-        : f.interests.filter(i => i !== value),
+        : f.interests.filter((i) => i !== value),
     }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    // You can add validation or API call here
     setForm(initialState);
     onClose();
     onSuccess();
@@ -48,51 +47,106 @@ export default function EnquiryModal({ open, onClose, onSuccess }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center enquiry-modal-bg">
-      <form className="enquiry-modal relative" onSubmit={handleSubmit}>
-        <button className="close-btn" type="button" onClick={onClose}>×</button>
-        <div className="flex items-center gap-2 mb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="relative w-full max-w-lg bg-white/10 backdrop-blur-lg rounded-3xl p-6 text-white shadow-2xl border border-white/20"
+      >
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-3 right-4 text-2xl font-bold text-white hover:text-red-400"
+        >
+          ×
+        </button>
+
+        {/* Mac-style Top Circles and Title */}
+        <div className="flex items-center gap-2 mb-6">
           <span className="w-3 h-3 rounded-full bg-red-400"></span>
           <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
           <span className="w-3 h-3 rounded-full bg-green-400"></span>
-          <span className="mx-auto text-xl font-semibold text-white" style={{ flex: 1, textAlign: "center" }}>Publish Your Business</span>
+          <h2 className="flex-1 text-center text-lg font-semibold text-white">
+            Publish Your Business
+          </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-1 mb-2">
-          <input name="name" value={form.name} onChange={handleChange} placeholder="Full Name" required />
-          <input name="email" value={form.email} onChange={handleChange} placeholder="Email" type="email" required />
-          <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" required />
-          <input name="company" value={form.company} onChange={handleChange} placeholder="Company" />
+
+        {/* Input Fields */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          <input
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Full Name"
+            required
+            className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none"
+          />
+          <input
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="Email"
+            type="email"
+            required
+            className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none"
+          />
+          <input
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+            placeholder="Phone Number"
+            required
+            className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none"
+          />
+          <input
+            name="company"
+            value={form.company}
+            onChange={handleChange}
+            placeholder="Company/Business Name"
+            className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none"
+          />
           
         </div>
-        <div className="mb-2">
-          <span className="block text-white mb-1">Intrested In:</span>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
-            {interestOptions.map(opt => (
+
+        {/* Checkboxes */}
+        <div className="mb-4">
+          <span className="block text-sm font-semibold mb-2">Interested In:</span>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-4">
+            {interestOptions.map((opt) => (
               <label
                 key={opt.value}
-                className="flex items-center gap-2 min-h-[1.5rem] leading-tight text-white text-sm"
+                className="flex items-center gap-2 text-sm text-white"
               >
                 <input
                   type="checkbox"
                   value={opt.value}
                   checked={form.interests.includes(opt.value)}
                   onChange={handleCheckbox}
-                  className="align-middle"
+                  className="accent-yellow-400"
                 />
-                <span className="align-middle">{opt.label}</span>
+                <span>{opt.label}</span>
               </label>
             ))}
           </div>
         </div>
+
+        {/* Message Box */}
         <textarea
           name="message"
           value={form.message}
           onChange={handleChange}
-          placeholder="Message/Enquiry Deatils"
-          rows={2}
-          className="w-full mb-2"
+          placeholder="Message/Enquiry Details"
+          rows={3}
+          className="w-full p-2 rounded-lg bg-white/20 text-white placeholder-white/70 mb-4 focus:outline-none"
         />
-        <button className="submit-btn" type="submit">Submit Enquiry</button>
+
+        {/* Submit Button */}
+         <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-white/80 to-white text-black font-semibold py-2 rounded-xl shadow-md hover:opacity-90 transition"
+        >
+          Submit Enquiry
+        </button>
       </form>
     </div>
   );

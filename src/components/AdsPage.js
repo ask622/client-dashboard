@@ -37,7 +37,7 @@ export default function AdsPage({ onClose }) {
             <tbody>
               {dummyAds.map(ad => (
                 <tr key={ad.id} className="border-b border-gray-700 text-center">
-                  <td className="py-2 px-2 sm:px-4">{ad.id}</td>
+                  <td className="py-2 px-2 sm:px-4">XXXX</td>
                   <td className="py-2 px-2 sm:px-4">{ad.name}</td>
                   <td className="py-2 px-2 sm:px-4">{ad.country}</td>
                   <td className="py-2 px-2 sm:px-4">{ad.state}</td>
