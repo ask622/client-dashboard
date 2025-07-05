@@ -62,7 +62,10 @@ const Dashboard = ({ data, location, onLocationChange }) => {
             <p className="text-4xl font-extrabold text-yellow-400 mt-2">
               {data[location].totalUsers.toString().padStart(3, '0')}
             </p>
-            <span className="absolute top-2 right-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></span>
+            <span
+              className="absolute top-2 right-2 w-3 h-3 rounded-full animate-ping"
+              style={{ backgroundColor: '#00e600' }}
+            ></span>
           </div>
 
           {/* Realtime Users */}
@@ -75,7 +78,10 @@ const Dashboard = ({ data, location, onLocationChange }) => {
             <p className="text-4xl font-extrabold text-yellow-400 mt-2">
               {data[location].realtimeUsers.toString().padStart(2, '0')}
             </p>
-            <span className="absolute top-2 right-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></span>
+            <span
+              className="absolute top-2 right-2 w-3 h-3 rounded-full animate-ping"
+              style={{ backgroundColor: '#00e600' }}
+            ></span>
           </div>
         </div>
 
@@ -99,7 +105,10 @@ const Dashboard = ({ data, location, onLocationChange }) => {
                 onClick={() => setAdsPageOpen(true)}
               >
                 <span className="absolute top-2 left-2 text-xs text-yellow-400 font-bold">Live</span>
-                <span className="absolute top-2 right-2 w-3 h-3 bg-green-400 rounded-full animate-ping"></span>
+                <span
+                  className="absolute top-2 right-2 w-3 h-3 rounded-full animate-ping"
+                  style={{ backgroundColor: '#00e600' }}
+                ></span>
                 <img
                   src={ad.icon}
                   alt={ad.label}
