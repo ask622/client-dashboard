@@ -1,17 +1,23 @@
-import React from "react";
-
-const dummyAds = [
-  { id: "AD001", name: "Ad User 1", country: "India", state: "UP", city: "Lucknow" },
-  { id: "AD002", name: "Ad User 2", country: "India", state: "Delhi", city: "Delhi" },
-  { id: "AD003", name: "Ad User 3", country: "India", state: "MP", city: "Bhopal" },
-  { id: "AD004", name: "Ad User 4", country: "India", state: "MH", city: "Mumbai" },
-  { id: "AD005", name: "Ad User 5", country: "India", state: "RJ", city: "Jaipur" },
-  { id: "AD006", name: "Ad User 6", country: "India", state: "PB", city: "Amritsar" },
-  { id: "AD007", name: "Ad User 7", country: "India", state: "KA", city: "Bangalore" },
-  { id: "AD008", name: "Ad User 8", country: "India", state: "TN", city: "Chennai" },
-];
+// AdsPage.js
+import React, { useEffect, useState } from "react";
 
 export default function AdsPage({ onClose }) {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/v1/users/users/');
+        const data = await res.json();
+        if (data.success) setUsers(data.users);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      }
+    };
+
+    fetchAllUsers();
+  }, []);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 px-2">
       <div className="bg-gradient-to-br from-[#232d47] to-[#1a1f3c] rounded-2xl shadow-2xl p-2 sm:p-4 md:p-8 w-full max-w-[98vw] sm:max-w-2xl md:max-w-4xl relative border border-gray-400/30">
@@ -23,37 +29,41 @@ export default function AdsPage({ onClose }) {
           <span className="mx-auto text-white text-base sm:text-lg font-semibold tracking-wide">Total Users</span>
           <button className="absolute right-4 top-2 sm:right-6 sm:top-4 text-white text-2xl" onClick={onClose}>×</button>
         </div>
+
         <div className="overflow-x-auto">
           <table className="min-w-full text-white mt-4 rounded-xl overflow-hidden text-xs sm:text-sm md:text-base">
             <thead>
               <tr className="bg-[#1a2233] text-white">
                 <th className="py-2 px-2 sm:px-4 font-semibold">ID</th>
                 <th className="py-2 px-2 sm:px-4 font-semibold">NAME</th>
-                <th className="py-2 px-2 sm:px-4 font-semibold">COUNTRY</th>
+                <th className="py-2 px-2 sm:px-4 font-semibold">EMAIL</th>
                 <th className="py-2 px-2 sm:px-4 font-semibold">STATE</th>
                 <th className="py-2 px-2 sm:px-4 font-semibold">CITY</th>
               </tr>
             </thead>
             <tbody>
-              {dummyAds.map(ad => (
-                <tr key={ad.id} className="border-b border-gray-700 text-center">
-                  <td className="py-2 px-2 sm:px-4">XXXX</td>
-                  <td className="py-2 px-2 sm:px-4">{ad.name}</td>
-                  <td className="py-2 px-2 sm:px-4">{ad.country}</td>
-                  <td className="py-2 px-2 sm:px-4">{ad.state}</td>
-                  <td className="py-2 px-2 sm:px-4">{ad.city}</td>
+              {users.length > 0 ? users.map((user, idx) => (
+                <tr key={user._id || idx} className="border-b border-gray-700 text-center">
+                  <td className="py-2 px-2 sm:px-4">{user._id?.slice(-5).toUpperCase() || "XXXX"}</td>
+                  <td className="py-2 px-2 sm:px-4">{user.fullName}</td>
+                  <td className="py-2 px-2 sm:px-4">{user.email}</td>
+                  <td className="py-2 px-2 sm:px-4">{user.state || "—"}</td>
+                  <td className="py-2 px-2 sm:px-4">{user.city || "—"}</td>
                 </tr>
-              ))}
+              )) : (
+                <tr><td colSpan={5} className="text-center py-4 text-gray-400">No users found.</td></tr>
+              )}
             </tbody>
           </table>
         </div>
-        {/* Pagination (dummy) */}
+
+        {/* Pagination placeholder */}
         <div className="flex justify-end mt-4 gap-2">
-          {[1,2,3,4,5].map(n => (
+          {[1, 2, 3, 4, 5].map(n => (
             <button key={n} className="w-8 h-8 rounded-full bg-[#232d47] border border-gray-500 text-white">{n}</button>
           ))}
         </div>
-        {/* Bottom left icon (dummy) */}
+
         <img
           src="/icons/user-ads.svg"
           alt="icon"
