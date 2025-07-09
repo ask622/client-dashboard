@@ -135,7 +135,7 @@ export default function EnquiryModal({ open, onClose, onSuccess }) {
           name="message"
           value={form.message}
           onChange={handleChange}
-          placeholder="Message/Enquiry Details"
+          placeholder="Message"
           rows={3}
           className="w-full p-2 rounded-lg bg-white/20 text-white placeholder-white/70 mb-4 focus:outline-none"
         />

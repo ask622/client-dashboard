@@ -18,11 +18,24 @@ body {
 .blink-dot {
   animation: blink 1s infinite;
 }
+@keyframes ping-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
 
+/* .animate-ping-slow {
+  animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
 
 .enquiry-modal-bg {
   background: rgba(30, 41, 59, 0.7);

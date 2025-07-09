@@ -33,10 +33,27 @@ const Dashboard = ({ data, location, onLocationChange }) => {
         background: "url('/bg-dashboard.jpg') center center / cover no-repeat, #101c2c",
       }}
     >
+      {/* Inline CSS for slow ping animation */}
+      <style>{`
+        @keyframes ping-slow {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.5);
+            opacity: 0;
+          }
+        }
+        .animate-ping-slow {
+          animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+      `}</style>
+
       <div className="pt-5 px-4 pb-5 max-w-[1440px] mx-auto">
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          
+
           {/* Select Location */}
           <div className="flex flex-col justify-center order-first md:order-last">
             <label className="text-base mb-2 font-semibold text-white">Select Location</label>
@@ -57,15 +74,16 @@ const Dashboard = ({ data, location, onLocationChange }) => {
             className="bg-gradient-to-br from-[#232d47] to-[#1a1f3c] text-white rounded-xl border-4 border-yellow-400 shadow-lg p-8 relative cursor-pointer min-h-[120px]"
             onClick={() => setAdsPageOpen(true)}
           >
-            <p className="text-base opacity-80 mb-1">Statistics</p>
             <p className="text-xl font-semibold">Total users</p>
             <p className="text-4xl font-extrabold text-yellow-400 mt-2">
               {data[location].totalUsers.toString().padStart(3, '0')}
             </p>
-            <span
-              className="absolute top-2 right-2 w-3 h-3 rounded-full animate-ping"
-              style={{ backgroundColor: '#00e600' }}
-            ></span>
+            <span className="absolute top-2 right-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
+                {/* <span className="relative inline-flex rounded-full h-3 w-3 bg-red-400"></span> */}
+              </span>
+            </span>
           </div>
 
           {/* Realtime Users */}
@@ -73,15 +91,16 @@ const Dashboard = ({ data, location, onLocationChange }) => {
             className="bg-gradient-to-br from-[#233d35] to-[#1a3c2c] text-white rounded-xl border-4 border-yellow-400 shadow-lg p-4 relative cursor-pointer min-h-[120px]"
             onClick={() => setAdsPageOpen(true)}
           >
-            <p className="text-base opacity-80 mb-1">Statistics</p>
             <p className="text-xl font-semibold">Realtime users</p>
             <p className="text-4xl font-extrabold text-yellow-400 mt-2">
               {data[location].realtimeUsers.toString().padStart(2, '0')}
             </p>
-            <span
-              className="absolute top-2 right-2 w-3 h-3 rounded-full animate-ping"
-              style={{ backgroundColor: '#00e600' }}
-            ></span>
+            <span className="absolute top-2 right-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
+                {/* <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span> */}
+              </span>
+            </span>
           </div>
         </div>
 
@@ -104,11 +123,13 @@ const Dashboard = ({ data, location, onLocationChange }) => {
                 className="relative rounded-xl p-3 flex flex-col items-center justify-center border-2 border-yellow-400 shadow-lg bg-white/10 backdrop-blur-md overflow-hidden min-h-[120px] cursor-pointer"
                 onClick={() => setAdsPageOpen(true)}
               >
-                <span className="absolute top-2 left-2 text-xs text-yellow-400 font-bold">Live</span>
-                <span
-                  className="absolute top-2 right-2 w-3 h-3 rounded-full animate-ping"
-                  style={{ backgroundColor: '#00e600' }}
-                ></span>
+                <span className=" absolute top-2 left-2 text-xs text-yellow-400 font-bold">Live</span>
+                <span className="absolute top-2 right-2">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
+                    {/* <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span> */}
+                  </span>
+                </span>
                 <img
                   src={ad.icon}
                   alt={ad.label}
@@ -131,7 +152,7 @@ const Dashboard = ({ data, location, onLocationChange }) => {
               onClick={() => setEnquiryOpen(true)}
             >
               <img src={icons.enquiry} alt="Enquiry Now" className="w-10 h-10 md:w-14 md:h-14 mb-2" />
-              <span className="text-sm md:text-lg text-[#232d47]">Enquiry Now</span>
+              <span className="text-sm md:text-lg text-[#232d47]"> Client Enquiry</span>
               <span className="text-xl md:text-2xl text-[#232d47]">
                 {data[location].ads.enquiry.toString().padStart(2, '0')}
               </span>
