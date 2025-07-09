@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Dashboard from "./components/Dashboard";
-import LoginModal from "./components/LoginModal";
+import LoginModal from "./components/AdminLoginModal.js";
 import Navbar from "./components/Navbar";
 import dashboardData from "./data/dashboardData.js";
 
 function App() {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [success, setSuccess] = useState(false);
   const [location, setLocation] = useState(Object.keys(dashboardData)[0]); // Default location
 
