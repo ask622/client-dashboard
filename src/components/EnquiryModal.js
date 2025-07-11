@@ -12,11 +12,22 @@ const initialState = {
 
 const interestOptions = [
   { label: "User Ads", value: "user" },
-  { label: "Business profile", value: "business" },
+  { label: "Business Profile", value: "business" },
   { label: "Banner Ads", value: "banner" },
   { label: "Video Ads", value: "video" },
   { label: "Home Ads", value: "home" },
-  { label: "Analytics Dashboard", value: "analytics" },
+  { label: "Business Promotion", value: "promotion" },
+  { label: "Software Solutions", value: "software" },
+  { label: "Websites & Apps", value: "webapps" },
+  { label: "Create Ads", value: "createads" },
+  { label: "Sell Your Product", value: "sellproduct" },
+  { label: "Business Loan", value: "loan" },
+  { label: "Civil Engineering", value: "civil" },
+  { label: "Architecture", value: "architecture" },
+  { label: "Interior Design", value: "interior" },
+  { label: "Partner in Success", value: "partner" },
+  { label: "Staff Support", value: "staff" },
+  { label: "Real Estate Services", value: "realestate" },
 ];
 
 export default function EnquiryModal({ open = true, onClose = () => {}, onSuccess = () => {} }) {
@@ -27,7 +38,6 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
-    // Clear error when user starts typing
     if (error) setError("");
   };
 
@@ -54,7 +64,6 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
       setError("Phone Number is required");
       return false;
     }
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) {
       setError("Please enter a valid email address");
@@ -65,28 +74,20 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
+
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
     setError("");
 
     try {
-      // Simulate API call since we can't make real API calls in this environment
       await new Promise((resolve, reject) => {
         setTimeout(() => {
-          // Simulate random success/failure for demo
-          if (Math.random() > 0.2) {
-            resolve();
-          } else {
-            reject(new Error("Network error. Please try again."));
-          }
+          if (Math.random() > 0.2) resolve();
+          else reject(new Error("Network error. Please try again."));
         }, 1500);
       });
 
-      // Reset form and close modal
       setForm(initialState);
       onClose();
       onSuccess();
@@ -99,11 +100,12 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
 
   if (!open) return null;
 
+  const wordCount = form.message.trim() === "" ? 0 : form.message.trim().split(/\s+/).length;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
       <div className="relative w-full max-w-lg bg-white/10 backdrop-blur-lg rounded-3xl p-6 text-white shadow-2xl border border-white/20">
         <div>
-          {/* Close Button */}
           <button
             type="button"
             onClick={onClose}
@@ -113,7 +115,6 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
             ×
           </button>
 
-          {/* Mac-style Top Circles and Title */}
           <div className="flex items-center gap-2 mb-6">
             <span className="w-3 h-3 rounded-full bg-red-400"></span>
             <span className="w-3 h-3 rounded-full bg-yellow-400"></span>
@@ -123,14 +124,12 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
             </h2>
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="mb-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-200 text-sm">
               {error}
             </div>
           )}
 
-          {/* Input Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
             <input
               name="name"
@@ -178,7 +177,6 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
             />
           </div>
 
-          {/* Checkboxes */}
           <div className="mb-4">
             <span className="block text-sm font-semibold mb-2">Interested In:</span>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-4">
@@ -201,18 +199,24 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
             </div>
           </div>
 
-          {/* Message Box */}
           <textarea
             name="message"
             value={form.message}
-            onChange={handleChange}
-            placeholder="Message"
+            onChange={(e) => {
+              const words = e.target.value.trim().split(/\s+/);
+              if (words.length <= 140) {
+                handleChange(e);
+              }
+            }}
+            placeholder="Message "
             rows={3}
             disabled={isSubmitting}
-            className="w-full p-2 rounded-lg bg-white/20 text-white placeholder-white/70 mb-4 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
+            className="w-full p-2 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
           />
+          <p className="text-xs text-white/60 text-right mb-4">
+            {wordCount}/140 words
+          </p>
 
-          {/* Submit Button */}
           <button
             type="submit"
             onClick={handleSubmit}
