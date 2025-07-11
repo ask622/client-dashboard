@@ -97,7 +97,7 @@ const LoginModal = ({ onClose, onLoginSuccess }) => {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-8 right-6 text-white text-xl font-bold bg-white/10 hover:bg-white/20 w-8 h-8 rounded-full transition-all duration-200 flex items-center justify-center z-10"
+          className="absolute top-0 right-1 text-white text-xl font-bold bg-white/10 hover:bg-white/20 w-8 h-8 rounded-full transition-all duration-200 flex items-center justify-center z-10"
           aria-label="Close"
         >
           ×
@@ -108,12 +108,12 @@ const LoginModal = ({ onClose, onLoginSuccess }) => {
           <span className="w-3 h-3 bg-red-400 rounded-full mr-2"></span>
           <span className="w-3 h-3 bg-yellow-300 rounded-full mr-2"></span>
           <span className="w-3 h-3 bg-green-400 rounded-full"></span>
-          <span className="ml-4 text-white/70 text-sm">Admin Login</span>
+          <span className="ml-20  text-white/80 text-sm">Admin Login</span>
         </div>
 
         {/* Header */}
         <div className="text-center py-6">
-          <h2 className="text-white text-xl font-semibold tracking-wide">ADMIN ACCESS</h2>
+          {/* <h2 className="text-white text-xl font-semibold tracking-wide">ADMIN ACCESS</h2> */}
           <p className="text-white/60 text-sm mt-2">Please login to continue</p>
         </div>
 
