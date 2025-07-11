@@ -11,12 +11,8 @@ const initialState = {
 };
 
 const interestOptions = [
-  { label: "User Ads", value: "user" },
-  { label: "Business Profile", value: "business" },
-  { label: "Banner Ads", value: "banner" },
-  { label: "Video Ads", value: "video" },
-  { label: "Home Ads", value: "home" },
   { label: "Business Promotion", value: "promotion" },
+  { label: "Business Profile", value: "business" },
   { label: "Software Solutions", value: "software" },
   { label: "Websites & Apps", value: "webapps" },
   { label: "Create Ads", value: "createads" },
@@ -28,12 +24,17 @@ const interestOptions = [
   { label: "Partner in Success", value: "partner" },
   { label: "Staff Support", value: "staff" },
   { label: "Real Estate Services", value: "realestate" },
+  { label: "User Ads", value: "user" },
+  { label: "Banner Ads", value: "banner" },
+  { label: "Video Ads", value: "video" },
+  { label: "Home Ads", value: "home" },
 ];
 
 export default function EnquiryModal({ open = true, onClose = () => {}, onSuccess = () => {} }) {
   const [form, setForm] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [showAllInterests, setShowAllInterests] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -101,6 +102,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
   if (!open) return null;
 
   const wordCount = form.message.trim() === "" ? 0 : form.message.trim().split(/\s+/).length;
+  const visibleOptions = showAllInterests ? interestOptions : interestOptions.slice(0, 6);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
@@ -180,7 +182,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
           <div className="mb-4">
             <span className="block text-sm font-semibold mb-2">Interested In:</span>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-4">
-              {interestOptions.map((opt) => (
+              {visibleOptions.map((opt) => (
                 <label
                   key={opt.value}
                   className="flex items-center gap-2 text-sm text-white cursor-pointer hover:text-white/80 transition-colors"
@@ -197,6 +199,15 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
                 </label>
               ))}
             </div>
+            {interestOptions.length > 6 && (
+              <button
+                type="button"
+                onClick={() => setShowAllInterests(!showAllInterests)}
+                className="mt-2 text-sm text-yellow-300 hover:underline focus:outline-none"
+              >
+                {showAllInterests ? "Show Less" : "Show More"}
+              </button>
+            )}
           </div>
 
           <textarea
@@ -208,7 +219,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
                 handleChange(e);
               }
             }}
-            placeholder="Message "
+            placeholder="Message"
             rows={3}
             disabled={isSubmitting}
             className="w-full p-2 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
