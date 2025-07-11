@@ -1,10 +1,47 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
+import AdminDashboard from "./components/AdminDashboard";
 import LoginModal from "./components/AdminLoginModal.js";
 import Navbar from "./components/Navbar";
+import AdminNavbar from "./components/AdminNavbar";
 import dashboardData from "./data/dashboardData.js";
 
 function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Normal User Route */}
+        <Route path="/" element={<UserDashboardPage />} />
+        <Route path="/dashboard" element={<UserDashboardPage />} />
+        
+        {/* Admin Route */}
+        <Route path="/admin" element={<AdminDashboardPage />} />
+        <Route path="/admin/*" element={<AdminDashboardPage />} />
+      </Routes>
+    </Router>
+  );
+}
+
+// Normal User Dashboard Page Component
+function UserDashboardPage() {
+  const [location, setLocation] = useState(Object.keys(dashboardData)[0]);
+
+  return (
+    <>
+      <Navbar isUserMode={true} />
+      <Dashboard
+        data={dashboardData}
+        location={location}
+        onLocationChange={setLocation}
+        isUserMode={true}
+      />
+    </>
+  );
+}
+
+// Admin Dashboard Page Component
+function AdminDashboardPage() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [location, setLocation] = useState(Object.keys(dashboardData)[0]);
   const [adminData, setAdminData] = useState(null);
@@ -89,13 +126,13 @@ function App() {
 
   return (
     <>
-      <Navbar
+      <AdminNavbar
         isLoggedIn={isLoggedIn}
         adminData={adminData}
         onLogin={handleLoginClick}
         onLogout={handleLogout}
       />
-      <Dashboard
+      <AdminDashboard
         data={dashboardData}
         location={location}
         onLocationChange={setLocation}

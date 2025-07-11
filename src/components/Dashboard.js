@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import EnquiryModal from './EnquiryModal';
 import SuccessModal from './SuccessModal';
-import AdsPage from './AdsPage';
-import LoginModal from './AdminLoginModal';
 
 const icons = {
   trial: "/icons/user-ads.svg",
@@ -14,13 +12,10 @@ const icons = {
   cion: "/icons/cion.png",
 };
 
-const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
+const Dashboard = ({ data, location, onLocationChange, isUserMode = false }) => {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
-  const [adsPageOpen, setAdsPageOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [totalUsers, setTotalUsers] = useState();
-  const [showAuthWarning, setShowAuthWarning] = useState(false);
 
   const adsList = [
     { key: 'trial', label: 'Total User Ads', icon: icons.trial },
@@ -30,7 +25,7 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
     { key: 'home', label: 'Home Ads', icon: icons.home },
   ];
 
-  // Fetch total users count
+  // Fetch total users count (only for display, not clickable in user mode)
   useEffect(() => {
     const fetchTotalUsers = async () => {
       try {
@@ -46,29 +41,11 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
     fetchTotalUsers();
   }, []);
 
-  // Handle protected content access
-  const handleProtectedClick = () => {
-    if (isLoggedIn) {
-      setAdsPageOpen(true);
-    } else {
-      setShowAuthWarning(true);
-      setTimeout(() => setShowAuthWarning(false), 3000);
-      setShowLoginModal(true);
+  // Handle clicks - for user mode, everything opens enquiry modal
+  const handleCardClick = () => {
+    if (isUserMode) {
+      setEnquiryOpen(true);
     }
-  };
-
-  // Handle successful login from modal
-  const handleLoginSuccess = (loginData) => {
-    // Store admin data in localStorage
-    localStorage.setItem('adminToken', loginData.token);
-    localStorage.setItem('adminEmail', loginData.email);
-    if (loginData.name) {
-      localStorage.setItem('adminName', loginData.name);
-    }
-    
-    setShowLoginModal(false);
-    // Refresh the page or update parent state
-    window.location.reload();
   };
 
   return (
@@ -93,22 +70,7 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
         .animate-ping-slow {
           animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
         }
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          75% { transform: translateX(5px); }
-        }
-        .animate-shake {
-          animation: shake 0.5s ease-in-out;
-        }
       `}</style>
-
-      {/* Auth Warning Banner */}
-      {showAuthWarning && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-red-500 text-white text-center py-2 animate-shake">
-          <p className="font-semibold">⚠️ Admin login required to access protected content</p>
-        </div>
-      )}
 
       <div className="pt-5 px-4 pb-5 max-w-[1440px] mx-auto">
         {/* Stats Section */}
@@ -130,10 +92,10 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
 
           {/* Total Users Card */}
           <div
-            className={`bg-gradient-to-br from-[#232d47] to-[#1a1f3c] text-white rounded-xl border-4 border-yellow-400 shadow-lg p-8 relative cursor-pointer min-h-[120px] transition-all duration-200 hover:shadow-xl hover:scale-105 ${
-              !isLoggedIn ? 'opacity-75 hover:opacity-100' : ''
+            className={`bg-gradient-to-br from-[#232d47] to-[#1a1f3c] text-white rounded-xl border-4 border-yellow-400 shadow-lg p-8 relative min-h-[120px] transition-all duration-200 hover:shadow-xl hover:scale-105 ${
+              isUserMode ? 'cursor-pointer' : ''
             }`}
-            onClick={handleProtectedClick}
+            onClick={isUserMode ? handleCardClick : undefined}
           >
             <p className="text-xl font-semibold">Total users</p>
             <p className="text-4xl font-extrabold text-yellow-400 mt-2">
@@ -146,19 +108,19 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
                 <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
               </span>
             </span>
-            {!isLoggedIn && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl">
-                <span className="text-white text-sm font-semibold bg-red-500 px-2 py-1 rounded">🔒 Login Required</span>
+            {isUserMode && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-xl opacity-0 hover:opacity-100 transition-opacity">
+                <span className="text-white text-sm font-semibold bg-blue-500 px-3 py-1 rounded">📩 Click to Enquire</span>
               </div>
             )}
           </div>
 
           {/* Realtime Users */}
           <div
-            className={`bg-gradient-to-br from-[#233d35] to-[#1a3c2c] text-white rounded-xl border-4 border-yellow-400 shadow-lg p-4 relative cursor-pointer min-h-[120px] transition-all duration-200 hover:shadow-xl hover:scale-105 ${
-              !isLoggedIn ? 'opacity-75 hover:opacity-100' : ''
+            className={`bg-gradient-to-br from-[#233d35] to-[#1a3c2c] text-white rounded-xl border-4 border-yellow-400 shadow-lg p-4 relative min-h-[120px] transition-all duration-200 hover:shadow-xl hover:scale-105 ${
+              isUserMode ? 'cursor-pointer' : ''
             }`}
-            onClick={handleProtectedClick}
+            onClick={isUserMode ? handleCardClick : undefined}
           >
             <p className="text-xl font-semibold">Realtime users</p>
             <p className="text-4xl font-extrabold text-yellow-400 mt-2">
@@ -169,9 +131,9 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
                 <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-green-600 opacity-75"></span>
               </span>
             </span>
-            {!isLoggedIn && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/20 rounded-xl">
-                <span className="text-white text-sm font-semibold bg-red-500 px-2 py-1 rounded">🔒 Login Required</span>
+            {isUserMode && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-xl opacity-0 hover:opacity-100 transition-opacity">
+                <span className="text-white text-sm font-semibold bg-blue-500 px-3 py-1 rounded">📩 Click to Enquire</span>
               </div>
             )}
           </div>
@@ -189,10 +151,10 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
             {adsList.map(ad => (
               <div
                 key={ad.key}
-                className={`relative rounded-xl p-3 flex flex-col items-center justify-center border-2 border-yellow-400 shadow-lg bg-white/10 backdrop-blur-md overflow-hidden min-h-[120px] cursor-pointer transition-all duration-200 hover:shadow-xl hover:scale-105 ${
-                  !isLoggedIn ? 'opacity-75 hover:opacity-100' : ''
+                className={`relative rounded-xl p-3 flex flex-col items-center justify-center border-2 border-yellow-400 shadow-lg bg-white/10 backdrop-blur-md overflow-hidden min-h-[120px] transition-all duration-200 hover:shadow-xl hover:scale-105 ${
+                  isUserMode ? 'cursor-pointer' : ''
                 }`}
-                onClick={handleProtectedClick}
+                onClick={isUserMode ? handleCardClick : undefined}
               >
                 <span className="absolute top-2 left-2 text-xs text-yellow-400 font-bold">Live</span>
                 <span className="absolute top-2 right-2">
@@ -212,9 +174,9 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
                 <p className="text-xl md:text-2xl font-bold text-yellow-400">
                   {data[location]?.ads?.[ad.key]?.toString().padStart(2, '0') || '00'}
                 </p>
-                {!isLoggedIn && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-xl">
-                    <span className="text-white text-xs font-semibold bg-red-500 px-2 py-1 rounded">🔒</span>
+                {isUserMode && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-xl opacity-0 hover:opacity-100 transition-opacity">
+                    <span className="text-white text-xs font-semibold bg-blue-500 px-2 py-1 rounded">📩 Enquire</span>
                   </div>
                 )}
               </div>
@@ -234,16 +196,16 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
           </div>
         </div>
 
-        {/* Login Status Indicator */}
-        <div className="fixed bottom-4 right-4 z-40">
-          <div className={`px-3 py-2 rounded-full text-sm font-semibold ${
-            isLoggedIn 
-              ? 'bg-green-500 text-white' 
-              : 'bg-red-500 text-white'
-          }`}>
-            {isLoggedIn ? '✓ Admin Logged In' : '✗ Not Logged In'}
+        {/* User Mode Info Banner */}
+        {isUserMode && (
+          <div className="fixed bottom-4 left-4 right-4 z-40">
+            <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg text-center shadow-lg">
+              <p className="text-sm font-semibold">
+                💡 Click on any card to enquire about our advertising services!
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Modals */}
@@ -256,15 +218,6 @@ const Dashboard = ({ data, location, onLocationChange, isLoggedIn }) => {
         open={successOpen} 
         onClose={() => setSuccessOpen(false)} 
       />
-      {adsPageOpen && (
-        <AdsPage onClose={() => setAdsPageOpen(false)} />
-      )}
-      {showLoginModal && (
-        <LoginModal
-          onClose={() => setShowLoginModal(false)}
-          onLoginSuccess={handleLoginSuccess}
-        />
-      )}
     </div>
   );
 };
