@@ -53,29 +53,18 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
   };
 
   const validateForm = () => {
-    if (!form.name.trim()) {
-      setError("Full Name is required");
-      return false;
-    }
-    if (!form.email.trim()) {
-      setError("Email is required");
-      return false;
-    }
-    if (!form.phone.trim()) {
-      setError("Phone Number is required");
-      return false;
-    }
+    if (!form.name.trim()) return setError("Full Name is required"), false;
+    if (!form.email.trim()) return setError("Email is required"), false;
+    if (!form.phone.trim()) return setError("Phone Number is required"), false;
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.email)) {
-      setError("Please enter a valid email address");
-      return false;
-    }
+    if (!emailRegex.test(form.email)) return setError("Please enter a valid email address"), false;
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -84,8 +73,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
     try {
       await new Promise((resolve, reject) => {
         setTimeout(() => {
-          if (Math.random() > 0.2) resolve();
-          else reject(new Error("Network error. Please try again."));
+          Math.random() > 0.2 ? resolve() : reject(new Error("Network error. Please try again."));
         }, 1500);
       });
 
@@ -101,7 +89,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
 
   if (!open) return null;
 
-  const wordCount = form.message.trim() === "" ? 0 : form.message.trim().split(/\s+/).length;
+  const charCount = form.message.length;
   const visibleOptions = showAllInterests ? interestOptions : interestOptions.slice(0, 6);
 
   return (
@@ -140,7 +128,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
               placeholder="Full Name *"
               required
               disabled={isSubmitting}
-              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
+              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2"
             />
             <input
               name="email"
@@ -150,7 +138,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
               type="email"
               required
               disabled={isSubmitting}
-              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
+              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2"
             />
             <input
               name="phone"
@@ -159,7 +147,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
               placeholder="Phone Number *"
               required
               disabled={isSubmitting}
-              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
+              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2"
             />
             <input
               name="company"
@@ -167,15 +155,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
               onChange={handleChange}
               placeholder="Company/Business Name"
               disabled={isSubmitting}
-              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
-            />
-            <input
-              name="location"
-              value={form.location}
-              onChange={handleChange}
-              placeholder="Location"
-              disabled={isSubmitting}
-              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50 md:col-span-2"
+              className="bg-white/20 text-white placeholder-white/70 rounded-lg p-2"
             />
           </div>
 
@@ -193,7 +173,7 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
                     checked={form.interests.includes(opt.value)}
                     onChange={handleCheckbox}
                     disabled={isSubmitting}
-                    className="accent-yellow-400 disabled:opacity-50"
+                    className="accent-yellow-400"
                   />
                   <span>{opt.label}</span>
                 </label>
@@ -203,29 +183,27 @@ export default function EnquiryModal({ open = true, onClose = () => {}, onSucces
               <button
                 type="button"
                 onClick={() => setShowAllInterests(!showAllInterests)}
-                className="mt-2 text-sm text-yellow-300 hover:underline focus:outline-none"
+                className="mt-2 text-sm text-yellow-300 hover:underline"
               >
                 {showAllInterests ? "Show Less" : "Show More"}
               </button>
             )}
           </div>
 
+          {/* Message with 140 character limit */}
           <textarea
             name="message"
             value={form.message}
             onChange={(e) => {
-              const words = e.target.value.trim().split(/\s+/);
-              if (words.length <= 140) {
-                handleChange(e);
-              }
+              if (e.target.value.length <= 140) handleChange(e);
             }}
-            placeholder="Message"
+            placeholder="Message "
             rows={3}
             disabled={isSubmitting}
-            className="w-full p-2 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/30 disabled:opacity-50"
+            className="w-full p-2 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/30"
           />
-          <p className="text-xs text-white/60 text-right mb-4">
-            {wordCount}/140 words
+          <p className={`text-xs text-right mb-4 ${charCount >= 140 ? "text-red-400" : "text-white/60"}`}>
+            {charCount}/140 characters
           </p>
 
           <button
